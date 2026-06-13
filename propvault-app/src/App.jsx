@@ -187,8 +187,8 @@ export default function App() {
   const [toast, setToast] = useState({ message: '', visible: false });
 
   // ─── LOGIN FORM STATE ──────────────────────────────────────────────────────
-  const [loginUser, setLoginUser] = useState('admin');
-  const [loginPass, setLoginPass] = useState('admin123');
+  const [loginUser, setLoginUser] = useState('');
+  const [loginPass, setLoginPass] = useState('');
   const [loginErr, setLoginErr] = useState(false);
 
   // ─── INQUIRY FORM STATE ────────────────────────────────────────────────────
@@ -870,13 +870,13 @@ export default function App() {
                 required
               />
             </div>
-            <p style={{ fontSize: '12px', color: '#bbb', margin: '.5rem 0 1.5rem' }}>Default credentials: admin / admin123</p>
+
             <button type="submit" className="btn btn-accent" style={{ width: '100%', justifyContent: 'center', padding: '12px' }}>
               Login →
             </button>
             {loginErr && (
               <p id="login-err" style={{ color: 'var(--red)', fontSize: '13px', marginTop: '.75rem' }}>
-                ⚠ Invalid credentials. Try admin / admin123
+                ⚠ Invalid credentials. Please try again.
               </p>
             )}
             <button
