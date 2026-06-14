@@ -330,7 +330,7 @@ export default function App() {
   // ─── ADMIN LOGIN / LOGOUT ──────────────────────────────────────────────────
   const handleLogin = (e) => {
     if (e) e.preventDefault();
-    if (loginUser === 'vedant' && loginPass === 'Srushti@07') {
+    if (loginUser === 'vedant' && loginPass === 'vedant@12') {
       setIsLoggedIn(true);
       setLoginErr(false);
       setActivePage('admin');
@@ -1708,202 +1708,203 @@ export default function App() {
                   </a>
                 </div>
               )}
-              </div>
+            </div>
 
-              {/* SPECS GRID */}
-              <div className="detail-specs-grid">
-                {currentDetailProp.type !== 'land' && currentDetailProp.beds > 0 && (
-                  <div className="spec-box">
-                    <div className="sv">{currentDetailProp.beds} BHK</div>
-                    <div className="sk">Bedrooms</div>
-                  </div>
-                )}
-                {currentDetailProp.type !== 'land' && currentDetailProp.baths > 0 && (
-                  <div className="spec-box">
-                    <div className="sv">{currentDetailProp.baths}</div>
-                    <div className="sk">Bathrooms</div>
-                  </div>
-                )}
-                {currentDetailProp.type !== 'land' && currentDetailProp.balc > 0 && (
-                  <div className="spec-box">
-                    <div className="sv">{currentDetailProp.balc}</div>
-                    <div className="sk">Balconies</div>
-                  </div>
-                )}
-                {currentDetailProp.area > 0 && (
-                  <div className="spec-box">
-                    <div className="sv">{currentDetailProp.area.toLocaleString()} sq.ft</div>
-                    <div className="sk">Total Area</div>
-                  </div>
-                )}
-                {currentDetailProp.type !== 'land' && currentDetailProp.carpet > 0 && (
-                  <div className="spec-box">
-                    <div className="sv">{currentDetailProp.carpet.toLocaleString()} sq.ft</div>
-                    <div className="sk">Carpet Area</div>
-                  </div>
-                )}
-                {currentDetailProp.type !== 'land' && currentDetailProp.buildup > 0 && (
-                  <div className="spec-box">
-                    <div className="sv">{currentDetailProp.buildup.toLocaleString()} sq.ft</div>
-                    <div className="sk">Built-up Area</div>
-                  </div>
-                )}
-                {currentDetailProp.type === 'flat' && currentDetailProp.floor > 0 && (
-                  <div className="spec-box">
-                    <div className="sv">
-                      {currentDetailProp.floor}
-                      {currentDetailProp.tfloors ? ` of ${currentDetailProp.tfloors}` : ''}
-                    </div>
-                    <div className="sk">Floor</div>
-                  </div>
-                )}
-                {currentDetailProp.facing && (
-                  <div className="spec-box">
-                    <div className="sv">{currentDetailProp.facing}</div>
-                    <div className="sk">Facing</div>
-                  </div>
-                )}
-                {currentDetailProp.type !== 'land' && currentDetailProp.furnish && (
-                  <div className="spec-box">
-                    <div className="sv">
-                      {currentDetailProp.furnish === 'unfurnished'
-                        ? 'Unfurnished'
-                        : currentDetailProp.furnish === 'semi'
-                          ? 'Semi-furnished'
-                          : 'Fully Furnished'}
-                    </div>
-                    <div className="sk">Furnishing</div>
-                  </div>
-                )}
-                {currentDetailProp.type !== 'land' && currentDetailProp.parking && currentDetailProp.parking !== 'none' && (
-                  <div className="spec-box">
-                    <div className="sv">
-                      {currentDetailProp.parking === 'bike'
-                        ? 'Bike Only'
-                        : currentDetailProp.parking === 'car'
-                          ? 'Car Only'
-                          : 'Car + Bike'}
-                    </div>
-                    <div className="sk">Parking</div>
-                  </div>
-                )}
-                {currentDetailProp.type !== 'land' && currentDetailProp.age && (
-                  <div className="spec-box">
-                    <div className="sv">{currentDetailProp.age === 'new' ? 'New' : `${currentDetailProp.age} Yrs`}</div>
-                    <div className="sk">Age</div>
-                  </div>
-                )}
-                {currentDetailProp.plot && (
-                  <div className="spec-box">
-                    <div className="sv">{currentDetailProp.plot}</div>
-                    <div className="sk">Dimensions</div>
-                  </div>
-                )}
-                {currentDetailProp.ownership && (
-                  <div className="spec-box">
-                    <div className="sv">{currentDetailProp.ownership.charAt(0).toUpperCase() + currentDetailProp.ownership.slice(1)}</div>
-                    <div className="sk">Ownership</div>
-                  </div>
-                )}
-              </div>
-
-              {/* ABOUT SECTION */}
-              {currentDetailProp.desc && (
-                <div className="detail-section">
-                  <h4>About This Property</h4>
-                  <p style={{ fontSize: '15px', color: '#555', lineHeight: '1.8' }}>{currentDetailProp.desc}</p>
+            {/* SPECS GRID */}
+            <div className="detail-specs-grid">
+              {currentDetailProp.type !== 'land' && currentDetailProp.beds > 0 && (
+                <div className="spec-box">
+                  <div className="sv">{currentDetailProp.beds} BHK</div>
+                  <div className="sk">Bedrooms</div>
                 </div>
               )}
-
-              {/* HIGHLIGHTS SECTION */}
-              {currentDetailProp.highlights && currentDetailProp.highlights.length > 0 && (
-                <div className="detail-section">
-                  <h4>Highlights</h4>
-                  <div className="amenity-tags">
-                    {currentDetailProp.highlights.map((h) => (
-                      <span className="amenity-tag" key={h}>
-                        ✓ {h}
-                      </span>
-                    ))}
-                  </div>
+              {currentDetailProp.type !== 'land' && currentDetailProp.baths > 0 && (
+                <div className="spec-box">
+                  <div className="sv">{currentDetailProp.baths}</div>
+                  <div className="sk">Bathrooms</div>
                 </div>
               )}
+              {currentDetailProp.type !== 'land' && currentDetailProp.balc > 0 && (
+                <div className="spec-box">
+                  <div className="sv">{currentDetailProp.balc}</div>
+                  <div className="sk">Balconies</div>
+                </div>
+              )}
+              {currentDetailProp.area > 0 && (
+                <div className="spec-box">
+                  <div className="sv">{currentDetailProp.area.toLocaleString()} sq.ft</div>
+                  <div className="sk">Total Area</div>
+                </div>
+              )}
+              {currentDetailProp.type !== 'land' && currentDetailProp.carpet > 0 && (
+                <div className="spec-box">
+                  <div className="sv">{currentDetailProp.carpet.toLocaleString()} sq.ft</div>
+                  <div className="sk">Carpet Area</div>
+                </div>
+              )}
+              {currentDetailProp.type !== 'land' && currentDetailProp.buildup > 0 && (
+                <div className="spec-box">
+                  <div className="sv">{currentDetailProp.buildup.toLocaleString()} sq.ft</div>
+                  <div className="sk">Built-up Area</div>
+                </div>
+              )}
+              {currentDetailProp.type === 'flat' && currentDetailProp.floor > 0 && (
+                <div className="spec-box">
+                  <div className="sv">
+                    {currentDetailProp.floor}
+                    {currentDetailProp.tfloors ? ` of ${currentDetailProp.tfloors}` : ''}
+                  </div>
+                  <div className="sk">Floor</div>
+                </div>
+              )}
+              {currentDetailProp.facing && (
+                <div className="spec-box">
+                  <div className="sv">{currentDetailProp.facing}</div>
+                  <div className="sk">Facing</div>
+                </div>
+              )}
+              {currentDetailProp.type !== 'land' && currentDetailProp.furnish && (
+                <div className="spec-box">
+                  <div className="sv">
+                    {currentDetailProp.furnish === 'unfurnished'
+                      ? 'Unfurnished'
+                      : currentDetailProp.furnish === 'semi'
+                        ? 'Semi-furnished'
+                        : 'Fully Furnished'}
+                  </div>
+                  <div className="sk">Furnishing</div>
+                </div>
+              )}
+              {currentDetailProp.type !== 'land' && currentDetailProp.parking && currentDetailProp.parking !== 'none' && (
+                <div className="spec-box">
+                  <div className="sv">
+                    {currentDetailProp.parking === 'bike'
+                      ? 'Bike Only'
+                      : currentDetailProp.parking === 'car'
+                        ? 'Car Only'
+                        : 'Car + Bike'}
+                  </div>
+                  <div className="sk">Parking</div>
+                </div>
+              )}
+              {currentDetailProp.type !== 'land' && currentDetailProp.age && (
+                <div className="spec-box">
+                  <div className="sv">{currentDetailProp.age === 'new' ? 'New' : `${currentDetailProp.age} Yrs`}</div>
+                  <div className="sk">Age</div>
+                </div>
+              )}
+              {currentDetailProp.plot && (
+                <div className="spec-box">
+                  <div className="sv">{currentDetailProp.plot}</div>
+                  <div className="sk">Dimensions</div>
+                </div>
+              )}
+              {currentDetailProp.ownership && (
+                <div className="spec-box">
+                  <div className="sv">{currentDetailProp.ownership.charAt(0).toUpperCase() + currentDetailProp.ownership.slice(1)}</div>
+                  <div className="sk">Ownership</div>
+                </div>
+              )}
+            </div>
 
-              {/* AMENITIES SECTION */}
+            {/* ABOUT SECTION */}
+            {currentDetailProp.desc && (
               <div className="detail-section">
-                <h4>Amenities</h4>
+                <h4>About This Property</h4>
+                <p style={{ fontSize: '15px', color: '#555', lineHeight: '1.8' }}>{currentDetailProp.desc}</p>
+              </div>
+            )}
+
+            {/* HIGHLIGHTS SECTION */}
+            {currentDetailProp.highlights && currentDetailProp.highlights.length > 0 && (
+              <div className="detail-section">
+                <h4>Highlights</h4>
                 <div className="amenity-tags">
-                  {currentDetailProp.amenities && currentDetailProp.amenities.length > 0 ? (
-                    currentDetailProp.amenities.map((a) => (
-                      <span className="amenity-tag" key={a}>
-                        {a}
-                      </span>
-                    ))
-                  ) : (
-                    <span style={{ color: '#bbb', fontSize: '14px' }}>None specified</span>
-                  )}
+                  {currentDetailProp.highlights.map((h) => (
+                    <span className="amenity-tag" key={h}>
+                      ✓ {h}
+                    </span>
+                  ))}
                 </div>
               </div>
+            )}
 
-              {/* DOCUMENTS SECTION */}
-              {currentDetailProp.docs && currentDetailProp.docs.filter((d) => !d.adminOnly).length > 0 && (
-                <div className="detail-section">
-                  <h4>Documents Available</h4>
-                  <div className="doc-list">
-                    {currentDetailProp.docs.filter((d) => !d.adminOnly).map((d, i) => (
-                      <div className="doc-item" key={i}>
-                        📄{' '}
-                        <span style={{ flex: 1 }}>
-                          {d.name}{' '}
-                          <span style={{ fontSize: '12px', color: '#999', marginLeft: '4px' }}>
-                            ({d.type ? d.type.replace(/_/g, ' ') : ''})
-                          </span>
+            {/* AMENITIES SECTION */}
+            <div className="detail-section">
+              <h4>Amenities</h4>
+              <div className="amenity-tags">
+                {currentDetailProp.amenities && currentDetailProp.amenities.length > 0 ? (
+                  currentDetailProp.amenities.map((a) => (
+                    <span className="amenity-tag" key={a}>
+                      {a}
+                    </span>
+                  ))
+                ) : (
+                  <span style={{ color: '#bbb', fontSize: '14px' }}>None specified</span>
+                )}
+              </div>
+            </div>
+
+            {/* DOCUMENTS SECTION */}
+            {currentDetailProp.docs && currentDetailProp.docs.filter((d) => !d.adminOnly).length > 0 && (
+              <div className="detail-section">
+                <h4>Documents Available</h4>
+                <div className="doc-list">
+                  {currentDetailProp.docs.filter((d) => !d.adminOnly).map((d, i) => (
+                    <div className="doc-item" key={i}>
+                      📄{' '}
+                      <span style={{ flex: 1 }}>
+                        {d.name}{' '}
+                        <span style={{ fontSize: '12px', color: '#999', marginLeft: '4px' }}>
+                          ({d.type ? d.type.replace(/_/g, ' ') : ''})
                         </span>
-                        {d.url && d.url !== '#' ? (
-                          <a href={d.url} target="_blank" rel="noreferrer" className="btn btn-ghost btn-sm">
-                            View ↗
-                          </a>
-                        ) : (
-                          <span style={{ fontSize: '12px', color: '#bbb' }}>On request</span>
-                        )}
-                      </div>
-                    ))}
-                  </div>
+                      </span>
+                      {d.url && d.url !== '#' ? (
+                        <a href={d.url} target="_blank" rel="noreferrer" className="btn btn-ghost btn-sm">
+                          View ↗
+                        </a>
+                      ) : (
+                        <span style={{ fontSize: '12px', color: '#bbb' }}>On request</span>
+                      )}
+                    </div>
+                  ))}
                 </div>
-              )}
-
-              {/* CONTACT SECTION */}
-              <div className="contact-section">
-                <h4>Interested in this property?</h4>
-                <p style={{ fontSize: '15px', color: '#666', lineHeight: 1.7, marginBottom: '1.5rem' }}>
-                  Get in touch with us directly for more details, site visits, or negotiations.
-                </p>
-                <a
-                  href={`tel:${CONTACT_PHONE}`}
-                  className="call-now-btn"
-                  id="contact-call-btn"
-                >
-                  <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" style={{ flexShrink: 0 }}>
-                    <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" />
-                  </svg>
-                  Call Now — {CONTACT_DISPLAY}
-                </a>
-                <p style={{ fontSize: '12px', color: '#aaa', marginTop: '1rem', textAlign: 'center' }}>
-                  Available Mon–Sat · 9 AM – 8 PM
-                </p>
               </div>
+            )}
+
+            {/* CONTACT SECTION */}
+            <div className="contact-section">
+              <h4>Interested in this property?</h4>
+              <p style={{ fontSize: '15px', color: '#666', lineHeight: 1.7, marginBottom: '1.5rem' }}>
+                Get in touch with us directly for more details, site visits, or negotiations.
+              </p>
+              <a
+                href={`tel:${CONTACT_PHONE}`}
+                className="call-now-btn"
+                id="contact-call-btn"
+              >
+                <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" style={{ flexShrink: 0 }}>
+                  <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" />
+                </svg>
+                Call Now — {CONTACT_DISPLAY}
+              </a>
+              <p style={{ fontSize: '12px', color: '#aaa', marginTop: '1rem', textAlign: 'center' }}>
+                Available Mon–Sat · 9 AM – 8 PM
+              </p>
             </div>
           </div>
         </div>
-      )}
+        </div>
+  )
+}
 
-      {/* FOOTER */}
-      <footer>
-        <span>PropVault</span> — Real Estate Management &nbsp;·&nbsp; Admin:{' '}
-        <a onClick={navigateAdmin} style={{ color: 'var(--accentl)', cursor: 'pointer', textDecoration: 'underline' }}>
-          Login here
-        </a>
-      </footer>
-    </div>
+{/* FOOTER */ }
+<footer>
+  <span>PropVault</span> — Real Estate Management &nbsp;·&nbsp; Admin:{' '}
+  <a onClick={navigateAdmin} style={{ color: 'var(--accentl)', cursor: 'pointer', textDecoration: 'underline' }}>
+    Login here
+  </a>
+</footer>
+    </div >
   );
 }
