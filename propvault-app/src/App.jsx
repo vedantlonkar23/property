@@ -141,6 +141,26 @@ function formatPrice(p, unit) {
   return '₹' + p.toLocaleString('en-IN');
 }
 
+function numberToWordsIndian(num) {
+  if (!num) return '';
+  num = parseInt(num, 10);
+  if (isNaN(num) || num === 0) return 'Zero';
+
+  const a = ['', 'One ', 'Two ', 'Three ', 'Four ', 'Five ', 'Six ', 'Seven ', 'Eight ', 'Nine ', 'Ten ', 'Eleven ', 'Twelve ', 'Thirteen ', 'Fourteen ', 'Fifteen ', 'Sixteen ', 'Seventeen ', 'Eighteen ', 'Nineteen '];
+  const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+  if ((num = num.toString()).length > 9) return 'Overflow (too large)';
+  const n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+  if (!n) return '';
+  let str = '';
+  str += (n[1] != 0) ? (a[Number(n[1])] || b[n[1][0]] + ' ' + a[n[1][1]]) + 'Crore ' : '';
+  str += (n[2] != 0) ? (a[Number(n[2])] || b[n[2][0]] + ' ' + a[n[2][1]]) + 'Lakh ' : '';
+  str += (n[3] != 0) ? (a[Number(n[3])] || b[n[3][0]] + ' ' + a[n[3][1]]) + 'Thousand ' : '';
+  str += (n[4] != 0) ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + 'Hundred ' : '';
+  str += (n[5] != 0) ? ((str != '') ? 'and ' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) : '';
+  return str.trim() + ' Rupees Only';
+}
+
 function typeLabel(t) {
   return { flat: 'Flat', bungalow: 'Bungalow', land: 'Land', commercial: 'Commercial' }[t] || t;
 }
@@ -481,18 +501,18 @@ export default function App() {
       lat: formLat.trim(),
       lng: formLng.trim(),
       area: parseFloat(formArea) || 0,
-      buildup: parseFloat(formBuildup) || 0,
-      carpet: parseFloat(formCarpet) || 0,
+      buildup: formType !== 'land' ? (parseFloat(formBuildup) || 0) : 0,
+      carpet: formType !== 'land' ? (parseFloat(formCarpet) || 0) : 0,
       plot: formPlot.trim(),
-      beds: parseInt(formBeds) || 0,
-      baths: parseInt(formBaths) || 0,
-      balc: parseInt(formBalc) || 0,
-      floor: parseInt(formFloor) || 0,
-      tfloors: parseInt(formTfloors) || 0,
-      furnish: formFurnish,
-      parking: formParking,
+      beds: formType !== 'land' ? (parseInt(formBeds) || 0) : 0,
+      baths: formType !== 'land' ? (parseInt(formBaths) || 0) : 0,
+      balc: formType !== 'land' ? (parseInt(formBalc) || 0) : 0,
+      floor: formType === 'flat' ? (parseInt(formFloor) || 0) : 0,
+      tfloors: formType === 'flat' ? (parseInt(formTfloors) || 0) : 0,
+      furnish: formType !== 'land' ? formFurnish : '',
+      parking: formType !== 'land' ? formParking : '',
       ownership: formOwnership,
-      age: formAge,
+      age: formType !== 'land' ? formAge : '',
       possession: formPossession,
       desc: formDesc.trim(),
       highlights: formHighlights
@@ -1121,6 +1141,11 @@ export default function App() {
                             onChange={(e) => setFormPrice(e.target.value)}
                             required
                           />
+                          {formPrice && !isNaN(formPrice) && (
+                            <div style={{ fontSize: '12px', color: 'var(--accent)', marginTop: '4px', fontWeight: 500 }}>
+                              {numberToWordsIndian(formPrice)}
+                            </div>
+                          )}
                         </div>
                         <div className="form-group">
                           <label>Price Type</label>
@@ -1687,19 +1712,19 @@ export default function App() {
 
               {/* SPECS GRID */}
               <div className="detail-specs-grid">
-                {currentDetailProp.beds > 0 && (
+                {currentDetailProp.type !== 'land' && currentDetailProp.beds > 0 && (
                   <div className="spec-box">
                     <div className="sv">{currentDetailProp.beds} BHK</div>
                     <div className="sk">Bedrooms</div>
                   </div>
                 )}
-                {currentDetailProp.baths > 0 && (
+                {currentDetailProp.type !== 'land' && currentDetailProp.baths > 0 && (
                   <div className="spec-box">
                     <div className="sv">{currentDetailProp.baths}</div>
                     <div className="sk">Bathrooms</div>
                   </div>
                 )}
-                {currentDetailProp.balc > 0 && (
+                {currentDetailProp.type !== 'land' && currentDetailProp.balc > 0 && (
                   <div className="spec-box">
                     <div className="sv">{currentDetailProp.balc}</div>
                     <div className="sk">Balconies</div>
@@ -1711,19 +1736,19 @@ export default function App() {
                     <div className="sk">Total Area</div>
                   </div>
                 )}
-                {currentDetailProp.carpet > 0 && (
+                {currentDetailProp.type !== 'land' && currentDetailProp.carpet > 0 && (
                   <div className="spec-box">
                     <div className="sv">{currentDetailProp.carpet.toLocaleString()} sq.ft</div>
                     <div className="sk">Carpet Area</div>
                   </div>
                 )}
-                {currentDetailProp.buildup > 0 && (
+                {currentDetailProp.type !== 'land' && currentDetailProp.buildup > 0 && (
                   <div className="spec-box">
                     <div className="sv">{currentDetailProp.buildup.toLocaleString()} sq.ft</div>
                     <div className="sk">Built-up Area</div>
                   </div>
                 )}
-                {currentDetailProp.floor > 0 && (
+                {currentDetailProp.type === 'flat' && currentDetailProp.floor > 0 && (
                   <div className="spec-box">
                     <div className="sv">
                       {currentDetailProp.floor}
@@ -1738,7 +1763,7 @@ export default function App() {
                     <div className="sk">Facing</div>
                   </div>
                 )}
-                {currentDetailProp.furnish && (
+                {currentDetailProp.type !== 'land' && currentDetailProp.furnish && (
                   <div className="spec-box">
                     <div className="sv">
                       {currentDetailProp.furnish === 'unfurnished'
@@ -1750,7 +1775,7 @@ export default function App() {
                     <div className="sk">Furnishing</div>
                   </div>
                 )}
-                {currentDetailProp.parking && currentDetailProp.parking !== 'none' && (
+                {currentDetailProp.type !== 'land' && currentDetailProp.parking && currentDetailProp.parking !== 'none' && (
                   <div className="spec-box">
                     <div className="sv">
                       {currentDetailProp.parking === 'bike'
@@ -1762,7 +1787,7 @@ export default function App() {
                     <div className="sk">Parking</div>
                   </div>
                 )}
-                {currentDetailProp.age && (
+                {currentDetailProp.type !== 'land' && currentDetailProp.age && (
                   <div className="spec-box">
                     <div className="sv">{currentDetailProp.age === 'new' ? 'New' : `${currentDetailProp.age} Yrs`}</div>
                     <div className="sk">Age</div>
