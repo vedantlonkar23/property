@@ -115,10 +115,15 @@ nav{background:var(--bark);color:var(--cream);padding:0 2rem;display:flex;align-
 .amenity-tag{background:var(--stone);padding:5px 14px;border-radius:50px;font-size:13px;color:var(--charcoal)}
 .doc-list{display:flex;flex-direction:column;gap:.5rem}
 .doc-item{display:flex;align-items:center;gap:.75rem;padding:.75rem;background:var(--stone);border-radius:8px;font-size:14px}
-.inquiry-form{background:var(--stone);border-radius:10px;padding:1.5rem}
-.inquiry-form h4{margin-bottom:1rem;font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--bark)}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.75rem}
-.form-row.single{grid-template-columns:1fr}
+/* CONTACT SECTION */
+.contact-section{background:linear-gradient(135deg, var(--bark) 0%, #3d3320 100%);border-radius:14px;padding:2rem;text-align:center;position:relative;overflow:hidden}
+.contact-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 30%,rgba(139,105,20,.2) 0%,transparent 70%)}
+.contact-section h4{margin-bottom:.5rem;font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--accentl);position:relative}
+.contact-section p{position:relative}
+.call-now-btn{display:inline-flex;align-items:center;gap:10px;padding:16px 36px;border-radius:12px;font-size:17px;font-weight:600;border:none;cursor:pointer;text-decoration:none;line-height:1;background:linear-gradient(135deg,#2A5C2A,#3a7d3a);color:#fff;box-shadow:0 6px 24px rgba(42,92,42,.35);transition:all .25s;position:relative;animation:callPulse 2.5s ease-in-out infinite}
+.call-now-btn:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 10px 36px rgba(42,92,42,.45);background:linear-gradient(135deg,#357435,#4a9a4a)}
+.call-now-btn:active{transform:translateY(0) scale(.98)}
+@keyframes callPulse{0%,100%{box-shadow:0 6px 24px rgba(42,92,42,.35)}50%{box-shadow:0 6px 32px rgba(42,92,42,.55),0 0 0 6px rgba(42,92,42,.12)}}
 
 /* ADMIN */
 .admin-layout{display:flex;min-height:calc(100vh - 60px)}

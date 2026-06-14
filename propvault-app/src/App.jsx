@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
+// ─── CONTACT CONFIG ──────────────────────────────────────────────────────────
+const CONTACT_PHONE = '+919156983369';
+const CONTACT_DISPLAY = '+91 91569 83369';
+
 // ─── CONSTANTS ───────────────────────────────────────────────────────────────
 const AMENITIES = [
   'Lift / Elevator', '24hr Security', 'CCTV Surveillance', 'Swimming Pool',
@@ -156,14 +160,7 @@ export default function App() {
     }
   });
 
-  const [inquiries, setInquiries] = useState(() => {
-    try {
-      const saved = localStorage.getItem('pv_inq');
-      return saved ? JSON.parse(saved) : [];
-    } catch (e) {
-      return [];
-    }
-  });
+
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activePage, setActivePage] = useState('public'); // public, admin-login, admin
@@ -191,12 +188,7 @@ export default function App() {
   const [loginPass, setLoginPass] = useState('');
   const [loginErr, setLoginErr] = useState(false);
 
-  // ─── INQUIRY FORM STATE ────────────────────────────────────────────────────
-  const [inqName, setInqName] = useState('');
-  const [inqPhone, setInqPhone] = useState('');
-  const [inqEmail, setInqEmail] = useState('');
-  const [inqDate, setInqDate] = useState('');
-  const [inqMsg, setInqMsg] = useState('Interested in this property. Please contact me.');
+
 
   // ─── ADMIN EDIT / ADD FORM STATE ───────────────────────────────────────────
   const [formEditId, setFormEditId] = useState('');
@@ -212,6 +204,8 @@ export default function App() {
   const [formPin, setFormPin] = useState('');
   const [formFacing, setFormFacing] = useState('');
   const [formMaplink, setFormMaplink] = useState('');
+  const [formLat, setFormLat] = useState('');
+  const [formLng, setFormLng] = useState('');
   const [formArea, setFormArea] = useState('');
   const [formBuildup, setFormBuildup] = useState('');
   const [formCarpet, setFormCarpet] = useState('');
@@ -237,9 +231,7 @@ export default function App() {
     localStorage.setItem('pv_props', JSON.stringify(props));
   }, [props]);
 
-  useEffect(() => {
-    localStorage.setItem('pv_inq', JSON.stringify(inquiries));
-  }, [inquiries]);
+
 
   // ─── TOAST TRIGGER ─────────────────────────────────────────────────────────
   const showToast = (msg) => {
@@ -303,11 +295,6 @@ export default function App() {
   const openDetail = (id) => {
     setDetailPropId(id);
     setCurrentGalleryIdx(0);
-    setInqName('');
-    setInqPhone('');
-    setInqEmail('');
-    setInqDate('');
-    setInqMsg('Interested in this property. Please contact me.');
     document.body.style.overflow = 'hidden';
   };
 
@@ -318,31 +305,7 @@ export default function App() {
 
   const currentDetailProp = props.find((p) => p.id === detailPropId);
 
-  // ─── INQUIRY SUBMIT ────────────────────────────────────────────────────────
-  const handleInquirySubmit = (e) => {
-    e.preventDefault();
-    if (!inqName.trim() || !inqPhone.trim()) {
-      showToast('⚠ Please enter your name and phone number');
-      return;
-    }
 
-    const newInq = {
-      id: 'i' + Date.now(),
-      propId: currentDetailProp.id,
-      propTitle: currentDetailProp.title,
-      name: inqName.trim(),
-      phone: inqPhone.trim(),
-      email: inqEmail.trim(),
-      date: inqDate,
-      msg: inqMsg.trim(),
-      createdAt: Date.now(),
-      read: false
-    };
-
-    setInquiries([newInq, ...inquiries]);
-    showToast('✓ Inquiry sent! We will contact you shortly.');
-    closeDetail();
-  };
 
   // ─── ADMIN LOGIN / LOGOUT ──────────────────────────────────────────────────
   const handleLogin = (e) => {
@@ -363,24 +326,7 @@ export default function App() {
     setPublicSection('home');
   };
 
-  // ─── ADMIN INQUIRY ACTIONS ─────────────────────────────────────────────────
-  const deleteInquiry = (id) => {
-    if (!window.confirm('Delete this inquiry?')) return;
-    setInquiries(inquiries.filter((inq) => inq.id !== id));
-    showToast('Inquiry deleted.');
-  };
 
-  const markInquiriesRead = () => {
-    setInquiries(inquiries.map((inq) => ({ ...inq, read: true })));
-  };
-
-  useEffect(() => {
-    if (adminSection === 'inquiries') {
-      markInquiriesRead();
-    }
-  }, [adminSection]);
-
-  const unreadInqCount = inquiries.filter((inq) => !inq.read).length;
 
   // ─── ADMIN PROP ACTIONS ────────────────────────────────────────────────────
   const deleteProperty = (id) => {
@@ -404,6 +350,8 @@ export default function App() {
     setFormPin('');
     setFormFacing('');
     setFormMaplink('');
+    setFormLat('');
+    setFormLng('');
     setFormArea('');
     setFormBuildup('');
     setFormCarpet('');
@@ -439,6 +387,8 @@ export default function App() {
     setFormPin(p.pincode || '');
     setFormFacing(p.facing || '');
     setFormMaplink(p.mapLink || '');
+    setFormLat(p.lat || '');
+    setFormLng(p.lng || '');
     setFormArea(p.area || '');
     setFormBuildup(p.buildup || '');
     setFormCarpet(p.carpet || '');
@@ -528,6 +478,8 @@ export default function App() {
       pincode: formPin.trim(),
       facing: formFacing,
       mapLink: formMaplink.trim(),
+      lat: formLat.trim(),
+      lng: formLng.trim(),
       area: parseFloat(formArea) || 0,
       buildup: parseFloat(formBuildup) || 0,
       carpet: parseFloat(formCarpet) || 0,
@@ -599,6 +551,12 @@ export default function App() {
   const availCount = props.filter((p) => p.status === 'available').length;
   const reservedCount = props.filter((p) => p.status === 'reserved').length;
   const soldCount = props.filter((p) => p.status === 'sold').length;
+
+  // Helper to build a Google Maps embed URL from lat/lng
+  const getMapEmbedUrl = (lat, lng) => {
+    if (!lat || !lng) return null;
+    return `https://www.google.com/maps?q=${lat},${lng}&z=15&output=embed`;
+  };
 
   return (
     <div>
@@ -936,30 +894,7 @@ export default function App() {
                 </svg>
                 Add Property
               </div>
-              <div
-                className={`sidebar-item ${adminSection === 'inquiries' ? 'active' : ''}`}
-                onClick={() => setAdminSection('inquiries')}
-              >
-                <svg className="sidebar-icon" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
-                </svg>
-                Inquiries
-                {unreadInqCount > 0 && (
-                  <span
-                    id="inq-badge"
-                    style={{
-                      background: 'var(--red)',
-                      color: '#fff',
-                      borderRadius: '50px',
-                      padding: '1px 8px',
-                      fontSize: '11px',
-                      marginLeft: 'auto'
-                    }}
-                  >
-                    {unreadInqCount}
-                  </span>
-                )}
-              </div>
+
               <div style={{ marginTop: 'auto', padding: '1.5rem 1.5rem 1rem' }}>
                 <button className="btn btn-outline btn-sm" onClick={handleLogout} style={{ width: '100%', justifyContent: 'center' }}>
                   ← Logout
@@ -995,11 +930,7 @@ export default function App() {
                       <div className="sc-val">{soldCount}</div>
                       <div className="sc-lbl">Sold</div>
                     </div>
-                    <div className="stat-card">
-                      <div className="sc-icon">📩</div>
-                      <div className="sc-val">{inquiries.length}</div>
-                      <div className="sc-lbl">Total Inquiries</div>
-                    </div>
+
                   </div>
 
                   <h3 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.4rem', color: 'var(--bark)', marginBottom: '1rem' }}>
@@ -1276,6 +1207,46 @@ export default function App() {
                           onChange={(e) => setFormMaplink(e.target.value)}
                         />
                       </div>
+                      <div className="form-grid" style={{ marginTop: '.75rem' }}>
+                        <div className="form-group">
+                          <label>Latitude</label>
+                          <input
+                            type="text"
+                            placeholder="e.g. 18.5204"
+                            value={formLat}
+                            onChange={(e) => setFormLat(e.target.value)}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label>Longitude</label>
+                          <input
+                            type="text"
+                            placeholder="e.g. 73.8567"
+                            value={formLng}
+                            onChange={(e) => setFormLng(e.target.value)}
+                          />
+                        </div>
+                      </div>
+                      {formLat && formLng && (
+                        <div style={{ marginTop: '1rem', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--stone)' }}>
+                          <div style={{ padding: '8px 12px', background: 'var(--stone)', fontSize: '12px', fontWeight: 600, color: 'var(--bark)', letterSpacing: '.05em' }}>
+                            📍 MAP PREVIEW
+                          </div>
+                          <iframe
+                            title="Map Preview"
+                            src={`https://www.google.com/maps?q=${formLat},${formLng}&z=15&output=embed`}
+                            width="100%"
+                            height="250"
+                            style={{ border: 0, display: 'block' }}
+                            allowFullScreen
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                          />
+                        </div>
+                      )}
+                      <p style={{ fontSize: '12px', color: '#aaa', marginTop: '.5rem' }}>
+                        Paste coordinates from Google Maps. Right-click any location → "What's here?" to get lat/lng.
+                      </p>
                     </div>
 
                     {/* AREA */}
@@ -1593,81 +1564,7 @@ export default function App() {
                 </div>
               )}
 
-              {/* INQUIRIES PAGE */}
-              {adminSection === 'inquiries' && (
-                <div id="admin-inquiries">
-                  <div className="admin-title">Client Inquiries</div>
-                  <div className="admin-subtitle">Messages and visit requests from potential buyers</div>
-                  {inquiries.length > 0 ? (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                      {inquiries.map((inq) => (
-                        <div
-                          style={{
-                            background: 'var(--white)',
-                            border: '1px solid var(--stone)',
-                            borderRadius: 'var(--radius)',
-                            padding: '1.25rem'
-                          }}
-                          key={inq.id}
-                        >
-                          <div
-                            style={{
-                              display: 'flex',
-                              alignItems: 'flex-start',
-                              justifyContent: 'space-between',
-                              marginBottom: '.75rem',
-                              gap: '.5rem',
-                              flexWrap: 'wrap'
-                            }}
-                          >
-                            <div>
-                              <div style={{ fontWeight: 500, fontSize: '15px' }}>
-                                {inq.name}
-                                <span style={{ fontWeight: 400, color: '#888', fontSize: '13px' }}>
-                                  {' '}
-                                  — {inq.phone}
-                                  {inq.email ? ` · ${inq.email}` : ''}
-                                </span>
-                              </div>
-                              <div style={{ fontSize: '13px', color: 'var(--accent)', marginTop: '3px' }}>
-                                Property: <strong>{inq.propTitle}</strong>
-                                {inq.date ? `  ·  Visit: ${inq.date}` : ''}
-                              </div>
-                            </div>
-                            <div style={{ fontSize: '12px', color: '#ccc', whiteSpace: 'nowrap' }}>
-                              {new Date(inq.createdAt).toLocaleDateString('en-IN', {
-                                day: 'numeric',
-                                month: 'short',
-                                year: 'numeric'
-                              })}
-                            </div>
-                          </div>
-                          <p
-                            style={{
-                              fontSize: '14px',
-                              color: '#555',
-                              background: 'var(--stone)',
-                              padding: '.85rem 1rem',
-                              borderRadius: '8px',
-                              lineHeight: 1.6
-                            }}
-                          >
-                            "{inq.msg || 'No message.'}"
-                          </p>
-                          <button className="btn btn-danger btn-sm" style={{ marginTop: '.75rem' }} onClick={() => deleteInquiry(inq.id)}>
-                            Delete
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="empty-state">
-                      <h3>No inquiries yet</h3>
-                      <p>Client messages will appear here when they submit the contact form on a property.</p>
-                    </div>
-                  )}
-                </div>
-              )}
+
             </div>
           </div>
         </div>
@@ -1757,6 +1654,35 @@ export default function App() {
                     </a>
                   )}
                 </div>
+              </div>
+
+              {/* EMBEDDED MAP */}
+              {getMapEmbedUrl(currentDetailProp.lat, currentDetailProp.lng) && (
+                <div className="detail-section" style={{ marginTop: '0' }}>
+                  <h4>📍 Property Location</h4>
+                  <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--stone)', marginTop: '.75rem' }}>
+                    <iframe
+                      title="Property Location"
+                      src={getMapEmbedUrl(currentDetailProp.lat, currentDetailProp.lng)}
+                      width="100%"
+                      height="300"
+                      style={{ border: 0, display: 'block' }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                    />
+                  </div>
+                  <a
+                    href={`https://www.google.com/maps/dir/?api=1&destination=${currentDetailProp.lat},${currentDetailProp.lng}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn btn-ghost btn-sm"
+                    style={{ marginTop: '.75rem' }}
+                  >
+                    🧭 Get Directions
+                  </a>
+                </div>
+              )}
               </div>
 
               {/* SPECS GRID */}
@@ -1921,69 +1847,25 @@ export default function App() {
                 </div>
               )}
 
-              {/* INQUIRY FORM */}
-              <div className="inquiry-form">
-                <h4>Express Interest / Request a Visit</h4>
-                <form onSubmit={handleInquirySubmit}>
-                  <div className="form-row">
-                    <div>
-                      <label>Your Name *</label>
-                      <input
-                        type="text"
-                        placeholder="Full name"
-                        value={inqName}
-                        onChange={(e) => setInqName(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label>Phone *</label>
-                      <input
-                        type="tel"
-                        placeholder="+91 9XXXXXXXXX"
-                        value={inqPhone}
-                        onChange={(e) => setInqPhone(e.target.value)}
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div className="form-row">
-                    <div>
-                      <label>Email</label>
-                      <input
-                        type="email"
-                        placeholder="your@email.com"
-                        value={inqEmail}
-                        onChange={(e) => setInqEmail(e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      <label>Preferred Visit Date</label>
-                      <input
-                        type="date"
-                        value={inqDate}
-                        onChange={(e) => setInqDate(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  <div className="form-row single">
-                    <div>
-                      <label>Message</label>
-                      <textarea
-                        style={{ minHeight: '80px', marginTop: 0 }}
-                        placeholder="Any specific questions or requirements…"
-                        value={inqMsg}
-                        onChange={(e) => setInqMsg(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  <button type="submit" className="btn btn-accent">
-                    📩 Send Inquiry
-                  </button>
-                  <p style={{ fontSize: '12px', color: '#aaa', marginTop: '.75rem' }}>
-                    We'll get back to you within 24 hours.
-                  </p>
-                </form>
+              {/* CONTACT SECTION */}
+              <div className="contact-section">
+                <h4>Interested in this property?</h4>
+                <p style={{ fontSize: '15px', color: '#666', lineHeight: 1.7, marginBottom: '1.5rem' }}>
+                  Get in touch with us directly for more details, site visits, or negotiations.
+                </p>
+                <a
+                  href={`tel:${CONTACT_PHONE}`}
+                  className="call-now-btn"
+                  id="contact-call-btn"
+                >
+                  <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" style={{ flexShrink: 0 }}>
+                    <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" />
+                  </svg>
+                  Call Now — {CONTACT_DISPLAY}
+                </a>
+                <p style={{ fontSize: '12px', color: '#aaa', marginTop: '1rem', textAlign: 'center' }}>
+                  Available Mon–Sat · 9 AM – 8 PM
+                </p>
               </div>
             </div>
           </div>
